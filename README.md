@@ -13,7 +13,7 @@ How do we solve this problem? We had many thoughts on approaches we could take t
 
 ---
 
-We tried the different approaches, and we have written a bit about the different ones down below, where we wanna compare our results and findings. All of our test and findings are done on a server with the following specs, 2x6 core CPU (3,33 GHz), 96GB RAM, a 5400RPM HDD and a clean Ubuntu 18.04 install.
+We tried the different approaches, and we have written a bit about the different ones down below, where we wanna compare our results and findings. All of our test and findings are done on a server with the following specs, 2x6 core CPU (3,33 GHz), 96GB RAM, a RAM Disk and a clean Ubuntu 18.04 install.
 
 ## MySQL full text indexing
 
@@ -32,11 +32,13 @@ Our teacher later on revealed his full text indexing he had performed on his lap
 
 ## grep
 
-We decided to also give greps a try, because we imagined it to be pretty optimised when it came to searching the linux file system. When we started out with our initial grep command it took between 45 seconds to lookup a city in all of the 37400 books. In itself we didnt think it was horrible for a single lookup however, we had 48900 to do, and it would turn out to be 25.5 days of total searching. We should be able to optimise it, and hopefully big time. Our initial grep command looked like this `grep -r '$cityName'`
+We decided to also give greps a try, because we imagined it to be pretty optimised when it came to searching the linux file system. When we started out with our initial grep command it took around 25.8 seconds to lookup a city in all of the 37400 books. In itself we didnt think it was horrible for a single lookup however, we had 48900 to do, and it would turn out to be 14.6 days of total searching. We should be able to optimise it, and hopefully big time. Our initial grep command looked like this `grep -r '$cityName'`
 
-As we only needed which files had the the city name we decided to add the 'l' option. We then did a time test to see if it made a difference since it had to output less information to our stdout. It decreased our search time by approx 10 seconds, which is a nice improvement. We then looked into what else could increase our time performance, we found the option called 'w', it did not improve our timings BUT, it provided another important aspect in our task. It added the possibility to find matches that was skipped earlier by ignorering special characters such as question marks, exclamations marks, dots and commas. And it didnt worsen our performance either. 
+As we only needed which files had the the city name we decided to add the `l` option. We then did a time test to see if it made a difference since it had to output less information to our stdout. It decreased our search time by approximately 16 seconds, just above a 2 times increment in performance, which is a nice improvement. We then looked into what else could increase our time performance, we found the option called `w`, it did not improve our timings BUT, it provided another important aspect in our task. It added the possibility to find matches that was skipped earlier by ignorering special characters such as question marks, exclamations marks, dots, commas and whitespaces. And it didnt worsen our performance either. 
 
-So now our command looks like this `grep -wrl '$cityName'`, however we are still around 35 seconds which is still to long, or better known as 19.8 days.
+So now our command looks like this `grep -wrl '$cityName'`, however we are still around 9.8 seconds which is still to long, or better known as 19.8 days. So we knew either we had to cut down on our datasets which would seem okay to do since we had so many both books and cities or we needed to find a faster way to do it. We started to think about the obvious way to solve this problem when thinking about what hardware we had on hand, threading... 
+
+We looked into how to do multithreading in bash, since it grep is a bash command, and we stumpled upon `xargs`
 
 ## Comparison
 While 
