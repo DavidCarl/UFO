@@ -31,6 +31,8 @@ So now our command looks like this `grep -wrl '$cityName'`, however we are still
 
 Another aspect to the speeds described above is dependant on what cities we search for, in the timing examples we are using its `London` and its important its with a capital L since `london` gave timings that were twice as big.
 
+### greb benchmarks
+
 ![](/Screenshot_1.png)
 
 The numbers used for the graph is in the run_time_data folder.
@@ -40,13 +42,13 @@ The data shown in the graph display a very consistent run time with a standard d
 If we look at the results of the different grep commands we can see that London is mentioned in far more books than Berlin is, and Berlin is mentioned in far more books than Odense is - this correlate well with our runtimes as we skip to the next book after the first match due to the `l` flag in grep, and therefore it skips seaching more text in the less often mentioned city names.
 In this case we choose a best case (London) something in the middle (Berlin) and a worst case (Odense).
 
-
-
-We looked into how to do multithreading in bash, since grep is a bash command, and we stumpled upon `xargs` and `find` as a combo to increase our grep speed. `xargs` has a option P which is the number of threads it will run at a time. Furthermore `xargs` are also used to generate commands with different bash tools that dont play nicely together normally. One example where we use this is our command where we now both use `find` and `grep`, we use `find` to parse specific files to our `grep` command to search in. We found substantial speed in doing it with mulitple threads, however there is also a limit to when its worth it.
+We looked into how to do multithreading in bash, since grep is a bash command, and we stumpled upon `xargs` and `find` as a combo to increase our grep speed. `xargs` has a option P which is the number of threads it will run at a time. Furthermore `xargs` are also used to generate commands with different bash tools that dont play nicely together normally. One example where we use this is our command where we now both use `find` and `grep`, we use `find` to parse specific files to our `grep` command to search in. We found substantial speed in doing it with mulitple threads, however at the same time its not worth it.
 
 ![](/Screenshot_2.png)
 
-As seen on the graph there is a good performance gain to get by threading it, nonetheless we also reach a point where it is not worth it to use more threads for for our search and instead start multiple searches at the same time. The breakpoint where its not worth it is located at \<insert thread amount here\>. 
+Here group 1 to 10 represent the amount on threads and 11 is 20 threads. As we can see there is no real performance gains to get from using 4 to 20 threads.
+
+As seen on the graph there is a good performance gain to get by threading it, nonetheless we also reach a point where it is not worth it to use more threads for for our search and instead start multiple searches at the same time. The breakpoint where its not worth it is located at 1 thread in this case. 
 
 We ended up with the command `find . -type f -print0 | xargs -0 -P $threadCount grep -wrl '$cityName' > ./res/$cityName`
 
