@@ -42,6 +42,9 @@ The data shown in the graph display a very consistent run time with a standard d
 
 We looked into how to do multithreading in bash, since it grep is a bash command, and we stumpled upon `xargs` and `find` as a combo to increase our grep speed.
 
+We ended up with the command `somethingsomething`
+
+Its possible to find our test scripts [Single threaded](run.sh) and [multi threaded](RunThreads.sh).
 
 ## Comparison
 Despite the fact that we never got to time the MySQL full text indexing and comparing it to our grep commando that we nerded a bit with, our teacher had a full text indexed database we could compare to as said in the 'MySQL full text indexing' section. Our conclussion on how to do it, depended on how it was supposed to be used. Are we talking about never again adding another city, it would be fastest to use our approach with using grep, with our experience making a Full text index. But if you are looking for having a more flexible database where the user can write whatever word they want, this includes cities and non cities it would definitely be fastest to make the full text indexing, since you are not limited to have such a powerfull server as us to make this quickly analyse the data.  
