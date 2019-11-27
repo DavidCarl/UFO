@@ -12,13 +12,16 @@ How do we solve this problem? We had many thoughts on approaches we could take t
  - Regex directly on unix (Since we ran unix based systems) / grep regex
 
 ---
+
 We tried the different approaches, and we have written a bit about the different ones down below, where we wanna compare our results and findings. All of our test and findings are done on a server with the following specs, 2x6 core CPU (3,33 GHz), 96GB RAM, a 5400RPM HDD and a clean Ubuntu 18.04 install.
 
 ## MySQL full text indexing
 
 As we started the assignment this seemed like the most straightfoward solution since it was a database course exam assignment. Our plan for doing it this way was to make a full text index on all the books. We designed our database schema to obtain our fill text indexing on the books, and started to add and index the books in the database.
 
-After a 4-5 of hours of indexing the HDD ran out of space and with no knowledge of progress in indexing our books we had to search for other options. Our teacher later on revealed his full text indexing he had performed on his laptop overnight.
+After a 4-5 of hours of indexing the HDD ran out of space and with no knowledge of progress in indexing our books. We then tried to first add all the books and afterwards index all the books, this approach added the books but failed the indexing, just like our first attempt. We would then had liked to sized up the VM we ran our MySQL Server on but we would have had to redownload all the books again.
+
+Our teacher later on revealed his full text indexing he had performed on his laptop overnight. 
 
 ## Search in Python3
 
