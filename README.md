@@ -37,12 +37,12 @@ The numbers used for the graph is in the run_time_data folder.
 
 On the image we can see 3 test groups, each group had a 100 runs to find a stable timing. Group 1 is London, Group 2 is Berlin and Group 3 is Odense. 
 The data shown in the graph display a very consistent run time with a standard deviation of 0.12 in Group 1, 0.23 in Group 2 and 0.23 in Group 3.
+If we look at the results of the different grep commands we can see that London is mentioned in far more books than Berlin is, and Berlin is mentioned in far more books than Odense is - this correlate well with our runtimes as we skip to the next book after the first match, and therefore it
 
 
+We looked into how to do multithreading in bash, since it grep is a bash command, and we stumpled upon `xargs` and `find` as a combo to increase our grep speed. `xargs` has a option P which is the number of threads it will run at a time. Furthermore `xargs` are also used to generate commands with different bash tools that dont play nicely together normally. One example where we use this is our command where we now both use `find` and `grep`, we use `find` to parse specific files to our `grep` command to search in. 
 
-We looked into how to do multithreading in bash, since it grep is a bash command, and we stumpled upon `xargs` and `find` as a combo to increase our grep speed.
-
-We ended up with the command `somethingsomething`
+We ended up with the command `find . -type f -print0 | xargs -0 -P <NUMBER_OF_THREADS> grep -wrl '$cityName' > ./res/$cityName`
 
 Its possible to find our test scripts [Single threaded](run.sh) and [multi threaded](RunThreads.sh).
 
