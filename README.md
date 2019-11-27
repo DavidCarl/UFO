@@ -21,7 +21,7 @@ As we started the assignment this seemed like the most straightfoward solution s
 
 After a 4-5 of hours of indexing the HDD ran out of space and with no knowledge of progress in indexing our books. We then tried to first add all the books and afterwards index all the books, this approach added the books but failed the indexing, just like our first attempt. We would then had liked to sized up the VM we ran our MySQL Server on but we would have had to redownload all the books again.
 
-Our teacher later on revealed his full text indexing he had performed on his laptop overnight. 
+Our teacher later on revealed his full text indexing he had performed on his laptop overnight, so he couldnt tell us how much time it took to perform the indexing. But he let us play around with queries on the database for a short time.
 
 ## Search in Python3
 
@@ -38,10 +38,13 @@ As we only needed which files had the the city name we decided to add the `l` op
 
 So now our command looks like this `grep -wrl '$cityName'`, however we are still around 9.8 seconds which is still to long, or better known as 19.8 days. So we knew either we had to cut down on our datasets which would seem okay to do since we had so many both books and cities or we needed to find a faster way to do it. We started to think about the obvious way to solve this problem when thinking about what hardware we had on hand, threading... 
 
-We looked into how to do multithreading in bash, since it grep is a bash command, and we stumpled upon `xargs`
+We looked into how to do multithreading in bash, since it grep is a bash command, and we stumpled upon `xargs` and `find` as a combo to increase our grep speed.
+
+![](/Screenshot_1.png)
 
 ## Comparison
-While 
+Even tho we never got to time the MySQL full text indexing and comparing it to our grep commando that we nerded a bit with, our teacher had a full text indexed database we could compare to as said in the section above. Our conclussion on how to do it, depended on some other parameters. 
+
 
 
 Written by
