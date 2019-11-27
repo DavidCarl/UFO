@@ -32,7 +32,7 @@ Our teacher later on revealed his full text indexing he had performed on his lap
 
 ## grep
 
-We decided to also give greps a try, because we imagined it to be pretty optimised when it came to searching the linux file system.
+We decided to also give greps a try, because we imagined it to be pretty optimised when it came to searching the linux file system. When we started out with our initial grep command it took between 45 seconds to lookup a city in all of the 37400 books. In itself we didnt think it was horrible for a single lookup however, we had 48900 to do, and it would turn out to be 25.5 days of total searching. We should be able to optimise it, and hopefully big time. 
 
 ## Comparison
 While 
