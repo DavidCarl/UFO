@@ -40,7 +40,7 @@ So now our command looks like this `grep -wrl '$cityName'`, however we are still
 
 We looked into how to do multithreading in bash, since it grep is a bash command, and we stumpled upon `xargs` and `find` as a combo to increase our grep speed.
 
-![](/Screenshot_1.png)
+![](/Screenshot_1.png | width=100)
 
 ## Comparison
 Even tho we never got to time the MySQL full text indexing and comparing it to our grep commando that we nerded a bit with, our teacher had a full text indexed database we could compare to as said in the section above. Our conclussion on how to do it, depended on some other parameters. 
