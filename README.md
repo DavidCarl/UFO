@@ -11,8 +11,6 @@ How do we solve this problem? We had many thoughts on approaches we could take t
  - MySQL full text indexing
  - grep
 
----
-
 We tried the different approaches, and we have written a bit about the different ones down below, where we wanna compare our results and findings. All of our test and findings are done on a server with the following specs, 2x6 core CPU (3,33 GHz), 96GB RAM, a RAM Disk and a clean Ubuntu 18.04 install.
 
 ## MySQL full text indexing
@@ -49,7 +47,7 @@ We looked into how to do multithreading in bash, since it grep is a bash command
 
 
 ## Comparison
-Even tho we never got to time the MySQL full text indexing and comparing it to our grep commando that we nerded a bit with, our teacher had a full text indexed database we could compare to as said in the section above. Our conclussion on how to do it, depended on how it was supposed to be used. Are we talking about never again adding another city, it would be fastest to use our approach with using grep, as our experience with making a Full text index. But if you are looking for having a more flexible database where the user can write whatever word they want, this includes cities and non cities it would definitely be fastest to make the full text indexing.  
+Despite the fact that we never got to time the MySQL full text indexing and comparing it to our grep commando that we nerded a bit with, our teacher had a full text indexed database we could compare to as said in the 'MySQL full text indexing' section. Our conclussion on how to do it, depended on how it was supposed to be used. Are we talking about never again adding another city, it would be fastest to use our approach with using grep, as our experience with making a Full text index. But if you are looking for having a more flexible database where the user can write whatever word they want, this includes cities and non cities it would definitely be fastest to make the full text indexing.  
 
 ## Written by
 ### Tjalfe Møller & David Carl
