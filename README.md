@@ -36,11 +36,17 @@ We decided to also give greps a try, because we imagined it to be pretty optimis
 
 As we only needed which files had the the city name we decided to add the `l` option. We then did a time test to see if it made a difference since it had to output less information to our stdout. It decreased our search time by approximately 16 seconds, just above a 2 times increment in performance, which is a nice improvement. We then looked into what else could increase our time performance, we found the option called `w`, it did not improve our timings BUT, it provided another important aspect in our task. It added the possibility to find matches that was skipped earlier by ignorering special characters such as question marks, exclamations marks, dots, commas and whitespaces. And it didnt worsen our performance either. 
 
-So now our command looks like this `grep -wrl '$cityName'`, however we are still around 9.8 seconds which is still to long, or better known as 19.8 days. So we knew either we had to cut down on our datasets which would seem okay to do since we had so many both books and cities or we needed to find a faster way to do it. We started to think about the obvious way to solve this problem when thinking about what hardware we had on hand, threading... 
+So now our command looks like this `grep -wrl '$cityName'`, however we are still around 9.8 seconds which is still to long, or better known as 5.5 days. So we knew either we had to cut down on our datasets which would seem okay to do since we had so many both books and cities or we needed to find a faster way to do it. We started to think about the obvious way to solve this problem when thinking about what hardware we had on hand, threading... 
+
+Another aspect to the speeds described above is dependant on what cities we search for, in the timing examples we are using its `London` and its important its with a capital L since `london` gave timings that were twice as big
+
+![](/Screenshot_1.png)
+
+<img src="/Screenshot_1.png" style="width=100px height=100px">
+
 
 We looked into how to do multithreading in bash, since it grep is a bash command, and we stumpled upon `xargs` and `find` as a combo to increase our grep speed.
 
-![](/Screenshot_1.png)
 
 ## Comparison
 Even tho we never got to time the MySQL full text indexing and comparing it to our grep commando that we nerded a bit with, our teacher had a full text indexed database we could compare to as said in the section above. Our conclussion on how to do it, depended on some other parameters. 
