@@ -1,4 +1,4 @@
-# Blogpost - (Mastering RegEx with performance in mind) / (Something else??)
+# Blogpost - (Mastering RegEx with performance in mind) / (Searching in tons of content about a ton of variables)
 
 We faced a problem, in a school exam assignment. We had to create a website where it was possible to input names of books which then returned all the cities which was mentioned in the book, or put in the name of a city which then gave a list back of books which mentioned the city, and more. All of the books were a part of Project Gutenberg.
 
@@ -9,7 +9,7 @@ How do we solve this problem? We had many thoughts on approaches we could take t
  - Search in Python3
  - Regex in Python3
  - MySQL full text indexing
- - Regex directly on unix (Since we ran unix based systems) / grep regex
+ - grep
 
 ---
 
@@ -32,6 +32,7 @@ Our teacher later on revealed his full text indexing he had performed on his lap
 
 ## grep
 
+We decided to also give greps a try, because we imagined it to be pretty optimised when it came to searching the linux file system.
 
 ## Comparison
 While 
