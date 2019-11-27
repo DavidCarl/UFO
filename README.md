@@ -53,7 +53,7 @@ Here group 1 to 10 represent the amount on threads and 11 is 20 threads. As we c
 
 As seen on the graph there is a good performance gain to get by threading it, nonetheless we also reach a point where it is not worth it to use more threads for for our search and instead start multiple searches at the same time. The breakpoint where its not worth it is located at 1 thread in this case. 
 
-As said above we ended up with parallelization since it gave the better performance in our case. 
+As said above we ended up with parallelization since it gave the better performance in our case, and a total runtime of 4-5 hours approximately.
 
 We ended up with the command `find . -type f -print0 | xargs -0 -P $threadCount grep -wrl '$cityName' > ./res/$cityName`
 
