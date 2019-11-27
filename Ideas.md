@@ -11,3 +11,10 @@
 https://datsoftlyngby.github.io/soft2019spring/DB_plan.html
 
 https://github.com/datsoftlyngby/soft2019spring-databases/blob/master/Exam/GutenbergProject.md
+
+## Search in Python3
+
+## Regex in Python3
+
+ - Search in Python3
+ - Regex in Python3
