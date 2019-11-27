@@ -9,8 +9,30 @@ How do we solve this problem? We had many thoughts on approaches we could take t
  - Search in Python3
  - Regex in Python3
  - MySQL full text indexing
- - Regex directly on unix (Since we ran unix based systems)
+ - Regex directly on unix (Since we ran unix based systems) / grep regex
 
+---
+We tried the different approaches, and we have written a bit about the different ones down below, where we wanna compare our results and findings.
+
+## Search in Python3
+
+
+
+## Regex in Python3
+
+
+
+## MySQL full text indexing
+
+As we started the assignment this seemed like the most straightfoward solution since it was a database course exam assignment. Our plan for doing it this way was to make a full text index on all the books. We designed our database schema to obtain our fill text indexing on the books, and started to add and index the books in the database.
+
+
+
+## grep
+
+
+## Comparison
+While 
 
 
 Written by
