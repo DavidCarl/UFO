@@ -15,7 +15,7 @@ We tried the different approaches, and we have written a bit about the different
 
 As we started the assignment this seemed like the most straightfoward solution since it was a database course exam assignment. Our plan for doing it this way was to make a full text index on all the books. We designed our database schema to obtain our fill text indexing on the books, and started to add and index the books in the database.
 
-After a 4-5 of hours of indexing the HDD ran out of space and with no knowledge of progress in indexing our books. We then tried to first add all the books and afterwards index all the books, this approach added the books but failed the indexing, just like our first attempt. We would then had liked to sized up the VM we ran our MySQL Server on but we would have had to redownload all the books again.
+After a 4-5 of hours of indexing the HDD ran out of space and with no knowledge of progress in indexing our books. We then tried to first add all the books and afterwards index all the books, this approach added the books but failed the indexing, just like our first attempt. We would then had liked to sized up the VM we ran our MySQL Server on but we would have had to redownload all the books again. The amount of storage the VM had was 80GB and 14GB of those was used to store the books.
 
 Our teacher later on revealed his full text indexing he had performed on his laptop overnight, so he couldnt tell us how much time it took to perform the indexing. But he let us play around with queries on the database for a short time.
 
@@ -37,17 +37,23 @@ The numbers used for the graph is in the run_time_data folder.
 
 On the image we can see 3 test groups, each group had a 100 runs to find a stable timing. Group 1 is London, Group 2 is Berlin and Group 3 is Odense. 
 The data shown in the graph display a very consistent run time with a standard deviation of 0.12 in Group 1, 0.23 in Group 2 and 0.23 in Group 3.
-If we look at the results of the different grep commands we can see that London is mentioned in far more books than Berlin is, and Berlin is mentioned in far more books than Odense is - this correlate well with our runtimes as we skip to the next book after the first match, and therefore it
+If we look at the results of the different grep commands we can see that London is mentioned in far more books than Berlin is, and Berlin is mentioned in far more books than Odense is - this correlate well with our runtimes as we skip to the next book after the first match due to the `l` flag in grep, and therefore it skips seaching more text in the less often mentioned city names.
+In this case we choose a best case (London) something in the middle (Berlin) and a worst case (Odense).
 
 
-We looked into how to do multithreading in bash, since it grep is a bash command, and we stumpled upon `xargs` and `find` as a combo to increase our grep speed. `xargs` has a option P which is the number of threads it will run at a time. Furthermore `xargs` are also used to generate commands with different bash tools that dont play nicely together normally. One example where we use this is our command where we now both use `find` and `grep`, we use `find` to parse specific files to our `grep` command to search in. 
 
-We ended up with the command `find . -type f -print0 | xargs -0 -P <NUMBER_OF_THREADS> grep -wrl '$cityName' > ./res/$cityName`
+We looked into how to do multithreading in bash, since grep is a bash command, and we stumpled upon `xargs` and `find` as a combo to increase our grep speed. `xargs` has a option P which is the number of threads it will run at a time. Furthermore `xargs` are also used to generate commands with different bash tools that dont play nicely together normally. One example where we use this is our command where we now both use `find` and `grep`, we use `find` to parse specific files to our `grep` command to search in. We found substantial speed in doing it with mulitple threads, however there is also a limit to when its worth it.
+
+As seen on the graph there is a good performance gain to get by threading it, nonetheless we also reach a point where it is not worth it to use more threads for for our search and instead start multiple searches at the same time. The breakpoint where its not worth it 
+
+We ended up with the command `find . -type f -print0 | xargs -0 -P $threadCount grep -wrl '$cityName' > ./res/$cityName`
 
 Its possible to find our test scripts [Single threaded](run.sh) and [multi threaded](RunThreads.sh).
 
-## Comparison
-Despite the fact that we never got to time the MySQL full text indexing and comparing it to our grep commando that we nerded a bit with, our teacher had a full text indexed database we could compare to as said in the 'MySQL full text indexing' section. Our conclussion on how to do it, depended on how it was supposed to be used. Are we talking about never again adding another city, it would be fastest to use our approach with using grep, with our experience making a Full text index. But if you are looking for having a more flexible database where the user can write whatever word they want, this includes cities and non cities it would definitely be fastest to make the full text indexing, since you are not limited to have such a powerfull server as us to make this quickly analyse the data.  
+## Comparison and Conclusion
+Despite the fact that we never got to time the MySQL full text indexing and comparing it to our grep commando that we nerded a bit with, our teacher had a full text indexed database we could compare to as said in the 'MySQL full text indexing' section. Our conclussion on how to do it, depended on how it was supposed to be used. Are we talking about never again adding another city, it would be fastest to use our approach with using grep, with our experience making a Full text index. But if you are looking for having a more flexible database where the user can write whatever word they want, this includes cities and non cities it would definitely be fastest to make the full text indexing, since you are not limited to have such a powerfull server as us to make this quickly analyse the data.
+
+If we had to do the project again we would had used the Full text indexing instead, since we saw the performance. We would still have to figure out how much storage the MySQL server needed since the amount we gave was not enough.
 
 ## Written by
 ### Tjalfe Møller & David Carl
