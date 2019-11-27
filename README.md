@@ -36,7 +36,8 @@ Another aspect to the speeds described above is dependant on what cities we sear
 The numbers used for the graph is in the run_time_data folder.
 
 On the image we can see 3 test groups, each group had a 100 runs to find a stable timing. Group 1 is London, Group 2 is Berlin and Group 3 is Odense. 
-The data shown in the graph display a very consistent run time with a standard deviation of 0.12 in Group 1, 0.23 in Group 2 and 0.23 in Group 3
+The data shown in the graph display a very consistent run time with a standard deviation of 0.12 in Group 1, 0.23 in Group 2 and 0.23 in Group 3.
+
 
 
 We looked into how to do multithreading in bash, since it grep is a bash command, and we stumpled upon `xargs` and `find` as a combo to increase our grep speed.
