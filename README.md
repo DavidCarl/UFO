@@ -49,7 +49,7 @@ We looked into how to do multithreading in bash, since it grep is a bash command
 
 
 ## Comparison
-Even tho we never got to time the MySQL full text indexing and comparing it to our grep commando that we nerded a bit with, our teacher had a full text indexed database we could compare to as said in the section above. Our conclussion on how to do it, depended on some other parameters. 
+Even tho we never got to time the MySQL full text indexing and comparing it to our grep commando that we nerded a bit with, our teacher had a full text indexed database we could compare to as said in the section above. Our conclussion on how to do it, depended on how it was supposed to be used. Are we talking about never again adding another city, it would be fastest to use our approach with using grep, as our experience with making a Full text index. But if you are looking for having a more flexible database where the user can write whatever word they want, this includes cities and non cities it would definitely be fastest to make the full text indexing.  
 
 
 
