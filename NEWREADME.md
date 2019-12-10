@@ -72,7 +72,7 @@ In this case we choose a best case (London) something in the middle (Berlin) and
 
 ### Multi threaded
 
-One way o
+One way of of inc
 You can read more about `xargs` [here](https://shapeshed.com/unix-xargs/)
 
 ### Parallelization
@@ -82,8 +82,3 @@ You can read more about `xargs` [here](https://shapeshed.com/unix-xargs/)
 
 
 ## Conclussion
-
-London!
-London.
-Londonderry
-London_
