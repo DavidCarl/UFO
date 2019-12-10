@@ -48,11 +48,7 @@ There is a problem with grep, that needs to be addressed in our use case. It mat
 
 We tried to fix this problem by making a regex pattern to match on `grep -rl -e '[\ \n,.<(\[]London[.,!?<>;:"]'`, it covers most use cases, however there are some it does not catch but its edge cases. We testet this command to see the timings, it gave a average runtime of 42.07 seconds which is a 329.29% decrease in performance compared with our 9.8 second timings we did with `grep -rl 'keyword'`. However we get a cleaner result set, which we also need in this case.
 
-This new timing on 42.07 seconds is pretty horrible and we are at the point now, where it again takes multiple weeks to search through our books. Once again we went diving into the [man page](https://linux.die.net/man/1/grep) hoping for natural implemented way to fix our problem. We found the option `-w or --word-regexp` which did the same as our regex search, while also fixing the worst of our edge cases.
-
-
-Now our grep command looks like this `grep -rlw 'keyword'` instead of this `grep -rl '[\ \n(,.<{(\[]keyword[.,!:;\-)\]}>]'`, and this example does not even take all possible combinations into consideration. We were afraid that this option would worsen our performance since it would be more picky with matches, however it did not worsen our performance nor did it improve it.
-
+This new timing on 42.07 seconds is pretty horrible and we are at the point now, where it again takes multiple weeks to search through our books. Once again we went diving into the [man page](https://linux.die.net/man/1/grep) hoping for natural implemented way to fix our problem. We found the option `-w or --word-regexp` which did the same as our regex search, while also fixing the worst of our edge cases. We timed our new command `grep -rlw 'keyword'` and got timings down on our `grep -rl 'keyword'` timings again, which is around 9.8 seconds.
 
 ### Case sensitivity
 
@@ -76,6 +72,7 @@ In this case we choose a best case (London) something in the middle (Berlin) and
 
 ### Multi threaded
 
+One way o
 You can read more about `xargs` [here](https://shapeshed.com/unix-xargs/)
 
 ### Parallelization
