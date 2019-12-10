@@ -1,10 +1,13 @@
-# Blogpost - Optimising querying with grep
+# Blogpost - Optimising searching with grep
 
 In a world with exponential amount of stored data, data querying is becoming more of a bottleneck. 
 This leads to an increased amount of required compute power and time used on queries.
 However, this can be resolved with already common tools on hand, that are not too advanced to use.
-Addressing this issue can make it cheap and fast with an initial high cost to query through the stored data.
+Addressing this issue can \<something here\>
 
+make it cheap and fast with an initial high cost to query through the stored data.
+
+We have approximately 37400 books in which we need to search through and find out what books have which cities mentioned. We have approximately 48900 cities to search for. So we wanted to find the quickest way to perform this task, since its 1.8 billion combinations, where each combination holds thousands of words to search through. So we will dive into how to optimize our grep search, to obtain speeds and a clean results set.
 
 ***Please notice***
 
