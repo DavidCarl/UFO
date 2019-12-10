@@ -61,7 +61,11 @@ We did not do anything about case sensitivity since city names supposed to be ca
 
 The way performed our benchmarks is by running it multiple times. Our single threaded test has been run 100 times on each city. Since we had to test so many amount of threads in our multi threaeded benchmark, and we saw the results from our single threaded benchmark, we decided to lower the amount of test to 10 on each.
 
-We choose a best case city London something in the middle Berlin and a worst case Odense.
+We also decided to test our Parrallelization 10 times each.
+
+We choose a best case city London something in the middle Berlin and a worst case Odense. 
+
+All of our benchmark data is located in this [folder](https://github.com/DavidCarl/UFO/tree/master/run_time_data) 
 
 ### Single threaded
 ![](/Screenshot_1.png)
@@ -98,15 +102,36 @@ The results show a significant diminishing returns for each thread we add to the
 
 ### Parallelization
 
+Another way of utilze the resources more efficiently, is to run multiple instances side by side i.e. parallelization.
+But does parallelization reduce the performance of the single instance by creating a bottleneck on the disk?
+
+We benchmarked parallelization to figure out what effect running multiple queries at the same time would have on our data set.
+
+Running 2 in parallel increased the search time by 1.1%, 9.91 seconds.
+Running 3 in parallel increased the search time by 1.9%, 9.98 seconds.
+Running 4 in parallel increased the search time by 2.1%, 10 seconds.
+Running 24 in parallel increased the search time by 24.5%, 12.2 seconds.
+
+As seen above we lose a bit performance by running it in parallel, however the lost performance is not worth crying over when looking at the speeds you finish searches. At 24 threads we get 24 searches, but losing 24.5% search time on each. 
+In the case of runnig 24 parallel searches with our 48900 cities would the total compute time 165.8 hours, spread across 24 threads would give a 6,9 hours.
+
+Running 12 searches in parallel with 2 threads allocated to each instance takes 6.8 seconds which is quite fast, but compared to running 24 threads with 24 searches which takes 12.2 seconds it would take 13.6 seconds to obtain the same result. 
+In the case of runnig 12 searches in parallel with 2 threads allocated to each instance with our 48900 cities would the total compute time 93.1 hours, spread across 12 parallel instances would give a 7,76 hours.
+
+Thereby we save 0,85 hours by only using a single thread 24 cores comapred to running 
 
 ### How to reproduce our benchmarks
 
 We created bash scripts for easier execution and reproducibility, however we couldnt get the bash script with multithreading to work properly so its testet manually by running the command X amount of times in quick succesion.
 
-For single thread test run [this](./run.sh) bash script, and for multi threaded take the command from [this](./RunThreads.sh) bash script, and put the amount of threads where it says `$i`.
+For single thread test run [this](https://github.com/DavidCarl/UFO/blob/master/run.sh) bash script, and for multi threaded take the command from [this](https://github.com/DavidCarl/UFO/blob/master/RunThreads.sh) bash script, and put the amount of threads where it says `$i`.
 
 As seen on our specs the server we had at our hand had a high RAM amount so we decided to create a RAM disk since we only had a HDD to remove that bottleneck. This might skew the results a bit compared to a HDD or SSD test.
 
 ## Conclussion
+
+As we seen its worth it to take time looking through the man page (or just a manual) of the tool you are using. We managed to save 16 seconds by using built in options compared to our own implementations.
+
+By our benchmark we learn several things, if we have a lot of things to search for (in our case cities) it is better to have many single threaded greps running in parallelization, but if we have less things than threads on the system it is beginning to be worth it to multi thread our greps. As long as we can fill out the total amount of threads its worth it to multi thread.
 
 #TODO write about Parallelization is better
