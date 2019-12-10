@@ -52,7 +52,7 @@ This new timing on 42.07 seconds is pretty horrible and we are at the point now,
 
 ### Case sensitivity
 
-We did not do anything about case sensitivity, but if its something you would like to use yourself it can be read about [here](http://droptips.com/using-grep-and-ignoring-case-case-insensitive-grep), since city names supposed to be capitalised.
+We did not do anything about case sensitivity since city names supposed to be capitalised, but if its something you would like to use yourself it can be read about [here.](http://droptips.com/using-grep-and-ignoring-case-case-insensitive-grep)
 
 ## grep benchmarks
 
@@ -70,7 +70,7 @@ In this case we choose a best case (London) something in the middle (Berlin) and
 
 ### Multi threaded
 
-One way of improving the peformance is to 
+One way of improving the peformance is to utilze 
 You can read more about `xargs` [here](https://shapeshed.com/unix-xargs/)
 
 ### Parallelization
