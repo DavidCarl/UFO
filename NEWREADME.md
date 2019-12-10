@@ -1,4 +1,4 @@
-# Blogpost - Optimising querying with Grep
+# Blogpost - Optimising querying with grep
 
 In a world with exponential amount of stored data, data querying is becoming more of a bottleneck. 
 This leads to an increased amount of required compute power and time used on queries.
@@ -15,14 +15,12 @@ All of our test and findings are done on a server with the following specs, 2x6 
 ## Prerequisites for this blog
 The prerequisites both covers if you wanna play around with the commands and just general knowledge of what this is.
 
- - Knowledge about grep
+ - Knowledge about what is grep
  - A Unix system if you want to test along 
 
 If your knowledge about grep is non existing, we would recommend to read [this](https://www.maketecheasier.com/what-is-grep-and-uses/) blog post.
 
 For the unix based system we would recommend Ubuntu for simplicity, or if you rather want to stick to Windows it should be Windows 10 with WSL. It can be read about [here](https://www.computerhope.com/issues/ch001879.htm).
-
-Now you should be ready to proceed reading our blog post.
 
 ## Terms used
 
@@ -32,19 +30,19 @@ Now you should be ready to proceed reading our blog post.
 
 Our grep command started out looking like this, `grep 'keyword'`. 
 
-### Option r
+### Search in many files
 
 First off we wanted to search a whole directory full of text files and not just a specific file for our keyword, and since grep is used to search text, and we want to search multiple files. We would need a way to read all the files in a directory recursively, and lucky for us this is baked right into grep as `-R, -r or --recursive`.
 
 Now our grep command looks like this `grep -r 'keyword'`, and using it gets us a search time that is 25.8 seconds. This is searched through our total of 37400 books. When looking at the time, 25.8 seconds through 37400 books it is not bad, but we have a total of 48900 cities to search for. That totals to 14.6 days of searching which is horribly slow.
 
-### Option l
+### Optimising search in files
 
 Now that we enabled ourself to search in our whole directory of files, we found out how long it took to search for a city, and all of our cities. We needed a way to make this search quicker, so we looked through the [man page](https://linux.die.net/man/1/grep) for grep. Here we found a option called `-l or --files-with-matches` that had the following 2 attributes, suprress output; instead of printing the line of where the match is, it now only prints the file name. The second attribute which in our case was one of the biggest improvements, it will stop searching after it matches in the file. 
 
 Now our grep command looks like this `grep -rl 'keyword'` and using it gets us a search time that is 9.8 seconds, this is a improvement on 16 seconds / a 62% decrease in search time. Furthermore it also gives us a better format to save to files for further data processing. 
 
-### Option w
+### Cleaning our result set
 
 There is a problem with grep, that needs to be addressed in our use case. It matches the keyword as long as its in the text without checking if its in another word. So fx, if we search for `London` it will also match on `Londonderry`, which is not what expected to get as return. 
 
@@ -82,17 +80,17 @@ You can read more about `xargs` [here](https://shapeshed.com/unix-xargs/)
 
 In order to force grep to utilize more than one thread we append `find . -type f -print0 | xargs -0 -P $threadCount` infront of our grep command. 
 
+We benchmarked our multi threaded command line to figure out if it was worth it to use more threads on the same task.
 
 ![](/Screenshot_2.png)
 <sub><sup>Here group 1 to 10 represent the amount on threads and 11 is 20 threads. As we can see there is no real performance gains to get from using 4 to 20 threads.</sup></sub>
 
 As seen on the graph we get some substantial performace gains by threading our process up untill 4 threads.
-Going from 1 to 2 threads gave us a 41% decrease in search time.
-Going from 1 to 3 threads gave us a 58% decrease in search time.
-Going from 1 to 4 threads gave us a 69,8% decrease in search time.
+Going from 1 to 2 threads gave us a 41.1% decrease in search time.
+Going from 1 to 3 threads gave us a 58.1% decrease in search time.
+Going from 1 to 4 threads gave us a 69.8% decrease in search time.
 
-
-but with diminishing returns for each thread we add to the process.
+The results show a significant diminishing returns for each thread we add to the process, and no performance gains above 4 threads (this point might shift based on the clock fequency of the given CPU)
 
 
 ### Parallelization
@@ -107,3 +105,5 @@ For single thread test run [this](./run.sh) bash script, and for multi threaded 
 As seen on our specs the server we had at our hand had a high RAM amount so we decided to create a RAM disk since we only had a HDD to remove that bottleneck. This might skew the results a bit compared to a HDD or SSD test.
 
 ## Conclussion
+
+#TODO write about Parallelization is better
