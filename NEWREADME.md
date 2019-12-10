@@ -1,11 +1,10 @@
 # Blogpost - Optimising searching with grep
 
-In a world with exponential amount of stored data, data querying is becoming more of a bottleneck. 
-This leads to an increased amount of required compute power and time used on queries.
-However, this can be resolved with already common tools on hand, that are not too advanced to use.
-Addressing this issue can \<something here\>
+In a world with exponential amount of stored data, data searching is becoming more of a bottleneck. 
+This leads to an increased amount of required compute power and time used on searches.
+However, in most cases you end up with subpar solutions not utilizing the tools and machines full potential.
+Addressing this issue can result in quicker and cheaper searches when you need to search through data.
 
-make it cheap and fast with an initial high cost to query through the stored data.
 
 We have approximately 37400 books in which we need to search through and find out what books have which cities mentioned. We have approximately 48900 cities to search for. So we wanted to find the quickest way to perform this task, since its 1.8 billion combinations, where each combination holds thousands of words to search through. So we will dive into how to optimize our grep search, to obtain speeds and a clean results set.
 
@@ -105,7 +104,7 @@ The results show a significant diminishing returns for each thread we add to the
 Another way of utilze the resources more efficiently, is to run multiple instances side by side i.e. parallelization.
 But does parallelization reduce the performance of the single instance by creating a bottleneck on the disk?
 
-We benchmarked parallelization to figure out what effect running multiple queries at the same time would have on our data set.
+We benchmarked parallelization to figure out what effect running multiple searches at the same time would have on our data set.
 
 Running 2 in parallel increased the search time by 1.1%, 9.91 seconds.
 Running 3 in parallel increased the search time by 1.9%, 9.98 seconds.
@@ -126,7 +125,7 @@ We created bash scripts for easier execution and reproducibility, however we cou
 
 For single thread test run [this](https://github.com/DavidCarl/UFO/blob/master/run.sh) bash script, and for multi threaded take the command from [this](https://github.com/DavidCarl/UFO/blob/master/RunThreads.sh) bash script, and put the amount of threads where it says `$i`.
 
-To parallelize our workload we started our searches in the bac
+To parallelize our workload we appended `&` at the end of the commands by doing this we start the process in a background process.
 
 As seen on our specs the server we had at our hand had a high RAM amount so we decided to create a RAM disk since we only had a HDD to remove that bottleneck. This might skew the results a bit compared to a HDD or SSD test.
 
