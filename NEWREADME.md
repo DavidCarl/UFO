@@ -34,7 +34,7 @@ Our grep command started out looking like this, `grep 'keyword'`.
 
 First off we wanted to search a whole directory full of text files and not just a specific file for our keyword, and since grep is used to search text, and we want to search multiple files. We would need a way to read all the files in a directory recursively, and lucky for us this is baked right into grep as `-R, -r or --recursive`.
 
-Now our grep command looks like this `grep -r 'keyword'`, and using it gets us a search time that is 25.8 seconds. This is searched through our total of 37400 books. When looking at the time, 25.8 seconds through 37400 books it isnt bad, but we have a total of 48900 cities to search for. That totals to 14.6 days of searching which is horribly slow.
+Now our grep command looks like this `grep -r 'keyword'`, and using it gets us a search time that is 25.8 seconds. This is searched through our total of 37400 books. When looking at the time, 25.8 seconds through 37400 books it is not bad, but we have a total of 48900 cities to search for. That totals to 14.6 days of searching which is horribly slow.
 
 ### Option l
 
@@ -44,17 +44,21 @@ Now our grep command looks like this `grep -rl 'keyword'` and using it gets us a
 
 ### Option w
 
-There is a problem with grep, that needs to be addressed in our use case. It matches the keyword as long as its in the text without checking if its in another word. So fx, if we search for `London` it will also match on `Londonderry`, which is not what expected to get as return. Once again we went diving into the [man page](https://linux.die.net/man/1/grep) where in we found the option `-w or --word-regexp`. 
+There is a problem with grep, that needs to be addressed in our use case. It matches the keyword as long as its in the text without checking if its in another word. So fx, if we search for `London` it will also match on `Londonderry`, which is not what expected to get as return. 
 
-`[\ \n(,.<{(\[]London[.,!:;\-)\]}>]`
+We tried to fix this problem by making a regex pattern to match on `grep -rl -e '[\ \n,.<(\[]London[.,!?<>;:"]'`, it covers most use cases, however there are some it does not catch but its edge cases. We testet this command to see the timings, it gave a average runtime of 42.07 seconds which is a 329.29% decrease in performance compared with our 9.8 second timings we did. However we get a cleaner result set, which we also need in this case.
 
-Now our grep command looks like this `grep -rlw 'keyword'` instead of this `grep -rl '[\ \n(,.<{(\[]keyword[.,!:;\-)\]}>]`'
 
-Select only those lines containing matches that form whole words. The test is that the matching substring must either be at the beginning of the line, or preceded by a non-word constituent character. Similarly, it must be either at the end of the line or followed by a non-word constituent character. Word constituent characters are letters, digits, and the underscore. This option has no effect if -x is also specified.
+
+Once again we went diving into the [man page](https://linux.die.net/man/1/grep) where in we found the option `-w or --word-regexp`. 
+
+
+Now our grep command looks like this `grep -rlw 'keyword'` instead of this `grep -rl '[\ \n(,.<{(\[]keyword[.,!:;\-)\]}>]'`, and this example does not even take all possible combinations into consideration. We were afraid that this option would worsen our performance since it would be more picky with matches, however it did not worsen our performance nor did it improve it.
+
 
 ### Case sensitivity
 
-We didnt do anything about case sensitivity, but if its something you would like to use yourself it can be read about [here](http://droptips.com/using-grep-and-ignoring-case-case-insensitive-grep)
+We did not do anything about case sensitivity, but if its something you would like to use yourself it can be read about [here](http://droptips.com/using-grep-and-ignoring-case-case-insensitive-grep)
 
 All of these options can be found in the [man page](https://linux.die.net/man/1/grep) for grep.
 
@@ -81,3 +85,4 @@ You can read more about `xargs` [here](https://shapeshed.com/unix-xargs/)
 London!
 London.
 Londonderry
+London_
