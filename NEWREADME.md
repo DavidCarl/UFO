@@ -121,7 +121,7 @@ Thereby we save 0,85 hours by only using a single thread 24 cores comapred to ru
 
 We created bash scripts for easier execution and reproducibility, however we couldnt get the bash script with multithreading to work properly so its testet manually by running the command X amount of times in quick succesion.
 
-For single thread test run [this](https://github.com/DavidCarl/UFO/blob/master/run.sh) bash script, and for multi threaded take the command from [this](https://github.com/DavidCarl/UFO/blob/master/RunThreads.sh) bash script, and put the amount of threads where it says `$i`. For parallelization test run [this](https://github.com/DavidCarl/UFO/blob/master/parallelization.sh) bash script. Remember to change `24` to the amount of threads you wanna test with, in both places.
+For single thread test run [this](https://github.com/DavidCarl/UFO/blob/master/run.sh) bash script, and for multi threaded take the command from [this](https://github.com/DavidCarl/UFO/blob/master/RunThreads.sh) bash script, and put the amount of threads where it says `$i`. For parallelization test run [this](https://github.com/DavidCarl/UFO/blob/master/parallelization.sh) bash script. Remember to change `24` to the amount of threads you wanna test with, in both occurences.
 
 As seen on our specs the server we had at our hand had a high RAM amount so we decided to create a RAM disk since we only had a HDD to remove that bottleneck. This might skew the results a bit compared to a HDD or SSD test.
 
