@@ -86,7 +86,13 @@ In order to force grep to utilize more than one thread we append `find . -type f
 ![](/Screenshot_2.png)
 <sub><sup>Here group 1 to 10 represent the amount on threads and 11 is 20 threads. As we can see there is no real performance gains to get from using 4 to 20 threads.</sup></sub>
 
-As seen on the graph we get some substantial performace gains by threading our process up untill 4 theads, but with diminishing returns for each thread we add
+As seen on the graph we get some substantial performace gains by threading our process up untill 4 threads.
+Going from 1 to 2 threads gave us a 41% decrease in search time.
+Going from 1 to 3 threads gave us a 58% decrease in search time.
+Going from 1 to 4 threads gave us a 69,8% decrease in search time.
+
+
+but with diminishing returns for each thread we add to the process.
 
 
 ### Parallelization
@@ -94,6 +100,10 @@ As seen on the graph we get some substantial performace gains by threading our p
 
 ### How to reproduce our benchmarks
 
+We created bash scripts for easier execution and reproducibility, however we couldnt get the bash script with multithreading to work properly so its testet manually by running the command X amount of times in quick succesion.
 
+For single thread test run [this](./run.sh) bash script, and for multi threaded take the command from [this](./RunThreads.sh) bash script, and put the amount of threads where it says `$i`.
+
+As seen on our specs the server we had at our hand had a high RAM amount so we decided to create a RAM disk since we only had a HDD to remove that bottleneck. This might skew the results a bit compared to a HDD or SSD test.
 
 ## Conclussion
