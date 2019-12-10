@@ -10,6 +10,8 @@ Addressing this issue can make it cheap and fast with an initial high cost to qu
 
 Everything we cover in this blog post is mainly aimed at improving timings in certain use cases, and may not be the best approach for all use cases.
 
+All of our test and findings are done on a server with the following specs, 2x6 core CPU (3,33 GHz), 96GB RAM, a RAM Disk and a clean Ubuntu 18.04 install. This is both the timings and the benchmarks.
+
 ## Prerequisites for this blog
 The prerequisites both covers if you wanna play around with the commands and just general knowledge of what this is.
 
@@ -84,13 +86,14 @@ In order to force grep to utilize more than one thread we append `find . -type f
 ![](/Screenshot_2.png)
 <sub><sup>Here group 1 to 10 represent the amount on threads and 11 is 20 threads. As we can see there is no real performance gains to get from using 4 to 20 threads.</sup></sub>
 
-As seen on the graph we get some substantial performace gains by threading our process 
+As seen on the graph we get some substantial performace gains by threading our process up untill 4 theads, but with diminishing returns for each thread we add
 
 
 ### Parallelization
 
 
 ### How to reproduce our benchmarks
+
 
 
 ## Conclussion
