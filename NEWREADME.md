@@ -20,9 +20,9 @@ The prerequisites both covers if you wanna play around with the commands and jus
  - Knowledge about what is grep
  - A Unix system if you want to test along 
 
-If your knowledge about grep is non existing, we would recommend to read [this](https://www.maketecheasier.com/what-is-grep-and-uses/) blog post.
+If your knowledge about grep is non existing, we would recommend to read [this](https://www.maketecheasier.com/what-is-grep-and-uses/)<sup>1</sup> blog post.
 
-For the unix based system we would recommend Ubuntu for simplicity, or if you rather want to stick to Windows it should be Windows 10 with WSL. It can be read about [here](https://www.computerhope.com/issues/ch001879.htm).
+For the unix based system we would recommend Ubuntu for simplicity, or if you rather want to stick to Windows it should be Windows 10 with WSL. It can be read about [here](https://www.computerhope.com/issues/ch001879.htm)<sup>2</sup>.
 
 ## Terms used
 
@@ -40,7 +40,7 @@ Now our grep command looks like this `grep -r 'keyword'`, and using it gets us a
 
 ### Optimising search in files
 
-Now that we enabled ourself to search in our whole directory of files, we found out how long it took to search for a city, and all of our cities. We needed a way to make this search quicker, so we looked through the [man page](https://linux.die.net/man/1/grep) for grep. Here we found a option called `-l or --files-with-matches` that had the following 2 attributes, suprress output; instead of printing the line of where the match is, it now only prints the file name. The second attribute which in our case was one of the biggest improvements, it will stop searching after it matches in the file. 
+Now that we enabled ourself to search in our whole directory of files, we found out how long it took to search for a city, and all of our cities. We needed a way to make this search quicker, so we looked through the [man page](https://linux.die.net/man/1/grep)<sup>3</sup> for grep. Here we found a option called `-l or --files-with-matches` that had the following 2 attributes, suprress output; instead of printing the line of where the match is, it now only prints the file name. The second attribute which in our case was one of the biggest improvements, it will stop searching after it matches in the file. 
 
 Now our grep command looks like this `grep -rl 'keyword'` and using it gets us a search time that is 9.8 seconds, this is a improvement on 16 seconds / a 62% decrease in search time. Furthermore it also gives us a better format to save to files for further data processing. 
 
@@ -50,11 +50,11 @@ There is a problem with grep, that needs to be addressed in our use case. It mat
 
 We tried to fix this problem by making a regex pattern to match on `grep -rl -e '[\ \n,.<(\[]London[.,!?<>;:"]'`, it covers most use cases, however there are some it does not catch but its edge cases. We testet this command to see the timings, it gave a average runtime of 42.07 seconds which is a 329.29% decrease in performance compared with our 9.8 second timings we did with `grep -rl 'keyword'`. However we get a cleaner result set, which we also need in this case.
 
-This new timing on 42.07 seconds is pretty horrible and we are at the point now, where it again takes multiple weeks to search through our books. Once again we went diving into the [man page](https://linux.die.net/man/1/grep) hoping for natural implemented way to fix our problem. We found the option `-w or --word-regexp` which did the same as our regex search, while also fixing the worst of our edge cases. We timed our new command `grep -rlw 'keyword'` and got timings down on our `grep -rl 'keyword'` timings again, which is around 9.8 seconds.
+This new timing on 42.07 seconds is pretty horrible and we are at the point now, where it again takes multiple weeks to search through our books. Once again we went diving into the [man page](https://linux.die.net/man/1/grep)<sup>3</sup> hoping for natural implemented way to fix our problem. We found the option `-w or --word-regexp` which did the same as our regex search, while also fixing the worst of our edge cases. We timed our new command `grep -rlw 'keyword'` and got timings down on our `grep -rl 'keyword'` timings again, which is around 9.8 seconds.
 
 ### Case sensitivity
 
-We did not do anything about case sensitivity since city names supposed to be capitalised, but if its something you would like to use yourself it can be read about [here.](http://droptips.com/using-grep-and-ignoring-case-case-insensitive-grep)
+We did not do anything about case sensitivity since city names supposed to be capitalised, but if its something you would like to use yourself it can be read about [here.](http://droptips.com/using-grep-and-ignoring-case-case-insensitive-grep)<sup>4</sup>
 
 ## grep benchmarks
 
@@ -64,7 +64,7 @@ We also decided to test our Parrallelization 10 times each.
 
 We choose a best case city London something in the middle Berlin and a worst case Odense. 
 
-All of our benchmark data is located in this [folder](https://github.com/DavidCarl/UFO/tree/master/run_time_data) 
+All of our benchmark data is located in this [folder](https://github.com/DavidCarl/UFO/tree/master/run_time_data)<sup>5</sup> 
 
 ### Single threaded
 ![](/Screenshot_1.png)
@@ -81,7 +81,7 @@ If we look at the results of the different grep commands we can see that London 
 One way of improving the peformance is to utilze the resources more efficiently.
 By default grep will only use one thread at a time.
 There is a way to force grep to use more threads by uning `xargs`.
-You can read more about `xargs` [here](https://shapeshed.com/unix-xargs/)
+You can read more about `xargs` [here](https://shapeshed.com/unix-xargs/)<sup>6</sup>
 
 In order to force grep to utilize more than one thread we append `find . -type f -print0 | xargs -0 -P $threadCount` infront of our grep command. 
 
@@ -121,7 +121,7 @@ Thereby we save 0,85 hours by only using a single thread 24 cores comapred to ru
 
 We created bash scripts for easier execution and reproducibility, however we couldnt get the bash script with multithreading to work properly so its testet manually by running the command X amount of times in quick succesion.
 
-For single thread test run [this](https://github.com/DavidCarl/UFO/blob/master/run.sh) bash script, and for multi threaded take the command from [this](https://github.com/DavidCarl/UFO/blob/master/RunThreads.sh) bash script, and put the amount of threads where it says `$i`. For parallelization test run [this](https://github.com/DavidCarl/UFO/blob/master/parallelization.sh) bash script. Remember to change `24` to the amount of threads you wanna test with, in both occurences.
+For single thread test run [this](https://github.com/DavidCarl/UFO/blob/master/run.sh)<sup>7</sup> bash script, and for multi threaded take the command from [this](https://github.com/DavidCarl/UFO/blob/master/RunThreads.sh)<sup>8</sup> bash script, and put the amount of threads where it says `$i`. For parallelization test run [this](https://github.com/DavidCarl/UFO/blob/master/parallelization.sh)<sup>9</sup> bash script. Remember to change `24` to the amount of threads you wanna test with, in both occurences.
 
 As seen on our specs the server we had at our hand had a high RAM amount so we decided to create a RAM disk since we only had a HDD to remove that bottleneck. This might skew the results a bit compared to a HDD or SSD test.
 
@@ -130,3 +130,15 @@ As seen on our specs the server we had at our hand had a high RAM amount so we d
 As we seen its worth it to take time looking through the man page (or just a manual) of the tool you are using. We managed to save 16 seconds by using built in options compared to our own implementations.
 
 By our benchmark we learn several things, if we have a lot of things to search for (in our case cities) it is better to have many single threaded greps running in parallelization, but if we have less things than threads on the system it is beginning to be worth it to multi thread our greps. As long as we can fill out the total amount of threads its worth it to multi thread, however it is not worth it to put more then 4 threads (in our case) on a single grep search at a time as seen in the multi threaded section.
+
+#### Reference 
+
+1: https://www.maketecheasier.com/what-is-grep-and-uses/
+2: https://www.computerhope.com/issues/ch001879.htm 
+3: https://linux.die.net/man/1/grep 
+4: http://droptips.com/using-grep-and-ignoring-case-case-insensitive-grep
+5: https://github.com/DavidCarl/UFO/tree/master/run_time_data
+6: https://shapeshed.com/unix-xargs/ 
+7: https://github.com/DavidCarl/UFO/blob/master/run.sh 
+8: https://github.com/DavidCarl/UFO/blob/master/RunThreads.sh
+9: https://github.com/DavidCarl/UFO/blob/master/parallelization.sh 
