@@ -1,4 +1,4 @@
-# Optimising searching with Grep
+# Blogpost - Optimising searching with Grep
 
 In a world with exponential amount of stored data, data querying is becoming more of a bottleneck. 
 This leads to an increased amount of required compute power and time used on queries.
@@ -6,6 +6,9 @@ However, this can be resolved with already common tools on hand, that are not to
 Addressing this issue can make it cheap and fast with an initial high cost to query through the stored data.
 
 
+***Please notice***
+
+Everything we cover in this blog post is mainly aimed at improving timings in certain use cases, and may not be the best approach for all use cases.
 
 ## Prerequisites for this blog
 The prerequisites both covers if you wanna play around with the commands and just general knowledge of what this is.
@@ -27,23 +30,25 @@ Now you should be ready to proceed reading our blog post.
 
 Our grep command started out looking like this, `grep 'keyword'`.
 
+### Option r
+
 First off we wanted to search a whole directory full of text files and not just a specific file for our keyword, and since grep is used to search text, and we want to search multiple files. We would need a way to read all the files in a directory recursively, and lucky for us this is baked right into grep as `-R, -r or --recursive`.
 
-Now out grep command looks like this `grep -r 'keyword'`, and using it gets us a search time that is 25.8 seconds. This is searched through our total of 37400 books. When looking at the time, 25.8 seconds through 37400 books it isnt bad, but we have a total of 48900 cities to search for. That totals to 14.6 days of searching which is horribly slow.
+Now our grep command looks like this `grep -r 'keyword'`, and using it gets us a search time that is 25.8 seconds. This is searched through our total of 37400 books. When looking at the time, 25.8 seconds through 37400 books it isnt bad, but we have a total of 48900 cities to search for. That totals to 14.6 days of searching which is horribly slow.
 
-\<write about l\>
+### Option l
 
-Now that we enabled ourself to search in our whole directory of files, we found out how long it took to search for 
+Now that we enabled ourself to search in our whole directory of files, we found out how long it took to search for a city, and all of our cities. We needed a way to make this search quicker, so we looked through the [man page](https://linux.die.net/man/1/grep) for grep. Here we found a option called `-l, --files-with-matches` that had the following 2 attributes, suprress output; instead of printing the line of where the match is, it now only prints the file name. The second attribute which in our case was one of the biggest improvements, it will stop searching after it matches in the file. 
 
-\<write about w\>
+Now our grep command looks like this `grep -rl 'keyword'` and using it gets us a search time that is 9.8 seconds, this is a improvement on 16 seconds, which in itself is pretty impressive furthermore it also gives us a better format to save to files for further data processing. 
 
+### Option w
 
-
-\<write about case senstitive\>
+### Case sensitivity
 
 We didnt do anything about case sensitivity, but if its something you would like to use yourself it can be read about [here](http://droptips.com/using-grep-and-ignoring-case-case-insensitive-grep)
 
-All of these options can be found in the [man page](https://linux.die.net/man/1/grep) about grep.
+All of these options can be found in the [man page](https://linux.die.net/man/1/grep) for grep.
 
 ## grep benchmarks
 
