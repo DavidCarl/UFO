@@ -76,7 +76,6 @@ On the image we can see 3 test groups. Group 1 is London, Group 2 is Berlin and 
 The data shown in the graph display a very consistent run time with a standard deviation of 0.12 in Group 1, 0.23 in Group 2 and 0.23 in Group 3.
 If we look at the results of the different grep commands we can see that London is mentioned in far more books than Berlin is, and Berlin is mentioned in far more books than Odense is - this correlate well with our runtimes as we skip to the next book after the first match due to the `l` flag in grep, and therefore it skips seaching more text in the less often mentioned city names.
 
-
 ### Multi threaded
 
 One way of improving the peformance is to utilze the resources more efficiently.
@@ -97,7 +96,6 @@ Going from 1 to 3 threads gave us a 58.1% decrease in search time.
 Going from 1 to 4 threads gave us a 69.8% decrease in search time.
 
 The results show a significant diminishing returns for each thread we add to the process, and no performance gains above 4 threads (this point might shift based on the clock fequency of the given CPU)
-
 
 ### Parallelization
 
@@ -123,9 +121,7 @@ Thereby we save 0,85 hours by only using a single thread 24 cores comapred to ru
 
 We created bash scripts for easier execution and reproducibility, however we couldnt get the bash script with multithreading to work properly so its testet manually by running the command X amount of times in quick succesion.
 
-For single thread test run [this](https://github.com/DavidCarl/UFO/blob/master/run.sh) bash script, and for multi threaded take the command from [this](https://github.com/DavidCarl/UFO/blob/master/RunThreads.sh) bash script, and put the amount of threads where it says `$i`.
-
-To parallelize our workload we appended `&` at the end of the commands by doing this we start the process in a background process.
+For single thread test run [this](https://github.com/DavidCarl/UFO/blob/master/run.sh) bash script, and for multi threaded take the command from [this](https://github.com/DavidCarl/UFO/blob/master/RunThreads.sh) bash script, and put the amount of threads where it says `$i`. For parallelization test run [this](https://github.com/DavidCarl/UFO/blob/master/parallelization.sh) bash script. Remember to change `24` to the amount of threads you wanna test with, in both places.
 
 As seen on our specs the server we had at our hand had a high RAM amount so we decided to create a RAM disk since we only had a HDD to remove that bottleneck. This might skew the results a bit compared to a HDD or SSD test.
 
