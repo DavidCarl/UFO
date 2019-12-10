@@ -1,4 +1,4 @@
-# Blogpost - Optimising searching with Grep
+# Blogpost - Optimising querying with Grep
 
 In a world with exponential amount of stored data, data querying is becoming more of a bottleneck. 
 This leads to an increased amount of required compute power and time used on queries.
@@ -28,7 +28,7 @@ Now you should be ready to proceed reading our blog post.
 
 ## grep
 
-Our grep command started out looking like this, `grep 'keyword'`.
+Our grep command started out looking like this, `grep 'keyword'`. 
 
 ### Option r
 
@@ -38,11 +38,19 @@ Now our grep command looks like this `grep -r 'keyword'`, and using it gets us a
 
 ### Option l
 
-Now that we enabled ourself to search in our whole directory of files, we found out how long it took to search for a city, and all of our cities. We needed a way to make this search quicker, so we looked through the [man page](https://linux.die.net/man/1/grep) for grep. Here we found a option called `-l, --files-with-matches` that had the following 2 attributes, suprress output; instead of printing the line of where the match is, it now only prints the file name. The second attribute which in our case was one of the biggest improvements, it will stop searching after it matches in the file. 
+Now that we enabled ourself to search in our whole directory of files, we found out how long it took to search for a city, and all of our cities. We needed a way to make this search quicker, so we looked through the [man page](https://linux.die.net/man/1/grep) for grep. Here we found a option called `-l or --files-with-matches` that had the following 2 attributes, suprress output; instead of printing the line of where the match is, it now only prints the file name. The second attribute which in our case was one of the biggest improvements, it will stop searching after it matches in the file. 
 
-Now our grep command looks like this `grep -rl 'keyword'` and using it gets us a search time that is 9.8 seconds, this is a improvement on 16 seconds, which in itself is pretty impressive furthermore it also gives us a better format to save to files for further data processing. 
+Now our grep command looks like this `grep -rl 'keyword'` and using it gets us a search time that is 9.8 seconds, this is a improvement on 16 seconds / a 62% decrease in search time. Furthermore it also gives us a better format to save to files for further data processing. 
 
 ### Option w
+
+There is a problem with grep, that needs to be addressed in our use case. It matches the keyword as long as its in the text without checking if its in another word. So fx, if we search for `London` it will also match on `Londonderry`, which is not what expected to get as return. Once again we went diving into the [man page](https://linux.die.net/man/1/grep) where in we found the option `-w or --word-regexp`. 
+
+`[\ \n(,.<{(\[]London[.,!:;\-)\]}>]`
+
+Now our grep command looks like this `grep -rlw 'keyword'` instead of this `grep -rl '[\ \n(,.<{(\[]keyword[.,!:;\-)\]}>]`'
+
+Select only those lines containing matches that form whole words. The test is that the matching substring must either be at the beginning of the line, or preceded by a non-word constituent character. Similarly, it must be either at the end of the line or followed by a non-word constituent character. Word constituent characters are letters, digits, and the underscore. This option has no effect if -x is also specified.
 
 ### Case sensitivity
 
@@ -66,3 +74,10 @@ You can read more about `xargs` [here](https://shapeshed.com/unix-xargs/)
 
 
 ### How to reproduce our benchmarks
+
+
+## Conclussion
+
+London!
+London.
+Londonderry
