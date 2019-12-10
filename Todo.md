@@ -1,9 +1,11 @@
 What we need to finish our blog post
 
- - Rewrite abstract
  - Make sure there is a red thread
- - Parralization
- - Conclusion
+
  
 Possible done
+ - Make sure there is a red thread
+ - Rewrite abstract
+ - Conclusion
+ - Parralization
  - Write problem statement
