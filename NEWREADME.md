@@ -81,6 +81,12 @@ You can read more about `xargs` [here](https://shapeshed.com/unix-xargs/)
 In order to force grep to utilize more than one thread we append `find . -type f -print0 | xargs -0 -P $threadCount` infront of our grep command. 
 
 
+![](/Screenshot_2.png)
+<sub><sup>Here group 1 to 10 represent the amount on threads and 11 is 20 threads. As we can see there is no real performance gains to get from using 4 to 20 threads.</sup></sub>
+
+As seen on the graph we get some substantial performace gains by threading our process 
+
+
 ### Parallelization
 
 
