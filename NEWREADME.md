@@ -70,7 +70,7 @@ In this case we choose a best case (London) something in the middle (Berlin) and
 
 ### Multi threaded
 
-One way of improving the peformance is to utilze 
+One way of improving the peformance is to utilze the resources
 You can read more about `xargs` [here](https://shapeshed.com/unix-xargs/)
 
 ### Parallelization
