@@ -46,11 +46,9 @@ Now our grep command looks like this `grep -rl 'keyword'` and using it gets us a
 
 There is a problem with grep, that needs to be addressed in our use case. It matches the keyword as long as its in the text without checking if its in another word. So fx, if we search for `London` it will also match on `Londonderry`, which is not what expected to get as return. 
 
-We tried to fix this problem by making a regex pattern to match on `grep -rl -e '[\ \n,.<(\[]London[.,!?<>;:"]'`, it covers most use cases, however there are some it does not catch but its edge cases. We testet this command to see the timings, it gave a average runtime of 42.07 seconds which is a 329.29% decrease in performance compared with our 9.8 second timings we did. However we get a cleaner result set, which we also need in this case.
+We tried to fix this problem by making a regex pattern to match on `grep -rl -e '[\ \n,.<(\[]London[.,!?<>;:"]'`, it covers most use cases, however there are some it does not catch but its edge cases. We testet this command to see the timings, it gave a average runtime of 42.07 seconds which is a 329.29% decrease in performance compared with our 9.8 second timings we did with `grep -rl 'keyword'`. However we get a cleaner result set, which we also need in this case.
 
-
-
-Once again we went diving into the [man page](https://linux.die.net/man/1/grep) where in we found the option `-w or --word-regexp`. 
+This new timing on 42.07 seconds is pretty horrible and we are at the point now, where it again takes multiple weeks to search through our books. Once again we went diving into the [man page](https://linux.die.net/man/1/grep) hoping for natural implemented way to fix our problem. We found the option `-w or --word-regexp` which did the same as our regex search, while also fixing the worst of our edge cases.
 
 
 Now our grep command looks like this `grep -rlw 'keyword'` instead of this `grep -rl '[\ \n(,.<{(\[]keyword[.,!:;\-)\]}>]'`, and this example does not even take all possible combinations into consideration. We were afraid that this option would worsen our performance since it would be more picky with matches, however it did not worsen our performance nor did it improve it.
@@ -67,8 +65,14 @@ All of these options can be found in the [man page](https://linux.die.net/man/1/
 The way performed our benchmarks is by running it multiple times. Our single threaded test has been run 100 times on each city. Since we had to test so many amount of threads in our multi threaeded benchmark, and we saw the results from our single threaded benchmark, we decided to lower the amount of test to 25 on each.
 
 ### Single threaded
+![](/Screenshot_1.png)
 
+The numbers used for the graph is in the run_time_data folder.
 
+On the image we can see 3 test groups, each group had a 100 runs to find a stable timing. Group 1 is London, Group 2 is Berlin and Group 3 is Odense. 
+The data shown in the graph display a very consistent run time with a standard deviation of 0.12 in Group 1, 0.23 in Group 2 and 0.23 in Group 3.
+If we look at the results of the different grep commands we can see that London is mentioned in far more books than Berlin is, and Berlin is mentioned in far more books than Odense is - this correlate well with our runtimes as we skip to the next book after the first match due to the `l` flag in grep, and therefore it skips seaching more text in the less often mentioned city names.
+In this case we choose a best case (London) something in the middle (Berlin) and a worst case (Odense).
 
 ### Multi threaded
 
