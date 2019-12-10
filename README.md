@@ -1,69 +1,152 @@
-# Blogpost - Searching in tons of content with a ton of variables
+# Blogpost - Optimising searching with grep
 
-We faced a problem, in a school exam assignment. We had to create a website where it was possible to input names of books which then returned all the cities which was mentioned in the book, or put in the name of a city which then gave a list back of books which mentioned the city, and more. All of the books were a part of Project Gutenberg.
+In a world with exponential amount of stored data, data searching is becoming more of a bottleneck. 
+This leads to an increased amount of required compute power and time used on searches.
+However, in most cases you end up with subpar solutions not utilizing the tools and machines full potential.
+Addressing this issue can result in quicker and cheaper searches when you need to search through data.
 
-So, the problem we faced were, how do we do this a good and fast way? Since we had around 37.400 books and 48.900 cities it was quite a problem to solve while also doing to with performance in mind, since we would have 1.8 billion lookups.
 
-How do we solve this problem? We had many thoughts on approaches we could take to solve this problem, but we knew ourself that some of these solutions would come with different down and upsides. We had the following ideas:
+We have approximately 37400 books in which we need to search through and find out what books have which cities mentioned. We have approximately 48900 cities to search for. So we wanted to find the quickest way to perform this task, since its 1.8 billion combinations, where each combination holds thousands of words to search through. So we will dive into how to optimize our grep search, to obtain speeds and a clean results set.
 
- - MySQL full text indexing
- - grep
+***Please notice***
 
-We tried the different approaches, and we have written a bit about the different ones down below, where we wanna compare our results and findings. All of our test and findings are done on a server with the following specs, 2x6 core CPU (3,33 GHz), 96GB RAM, a RAM Disk and a clean Ubuntu 18.04 install.
+Everything we cover in this blog post is mainly aimed at improving timings in certain use cases, and may not be the best approach for all use cases.
 
-## MySQL full text indexing
+All of our test and findings are done on a server with the following specs, 2x6 core CPU (3,33 GHz), 96GB RAM, a RAM Disk and a clean Ubuntu 18.04 install. This is both the timings and the benchmarks.
 
-As we started the assignment this seemed like the most straightfoward solution since it was a database course exam assignment. Our plan for doing it this way was to make a full text index on all the books. We designed our database schema to obtain our full text indexing on the books, and started to add and index the books in the database.
+## Prerequisites for this blog
+The prerequisites both covers if you wanna play around with the commands and just general knowledge of what this is.
 
-After a 4-5 of hours of indexing the disk ran out of space and with no knowledge of progress in indexing our books. We then tried to first add all the books and afterwards index all the books, this approach added the books but failed the indexing, just like our first attempt. We would then had liked to sized up the VM we ran our MySQL Server on but we would have had to redownload all the books again. The amount of storage the VM had was 60GB and 14GB of those was used to store the books.
+ - Knowledge about what is grep
+ - A Unix system if you want to test along 
 
-Our teacher later on revealed his full text indexing he had performed on his laptop overnight, so he couldnt tell us how much time it took to perform the indexing. But he let us play around with queries on the database for a short time.
+If your knowledge about grep is non existing, we would recommend to read [this](https://www.maketecheasier.com/what-is-grep-and-uses/)<sup>1</sup> blog post.
+
+For the unix based system we would recommend Ubuntu for simplicity, or if you rather want to stick to Windows it should be Windows 10 with WSL. It can be read about [here](https://www.computerhope.com/issues/ch001879.htm)<sup>2</sup>.
+
+## Terms used
+
+ - keyword : The specific word we are looking for
 
 ## grep
 
-We decided to also give greps a try, because we imagined it to be pretty optimised when it came to searching the linux file system. When we started out with our initial grep command it took around 25.8 seconds to lookup a city in all of the 37400 books. In itself we didnt think it was horrible for a single lookup however, we had 48900 to do, and it would turn out to be 14.6 days of total searching. We should be able to optimise it, and hopefully big time. Our initial grep command looked like this `grep -r '$cityName'`
+Our grep command started out looking like this, `grep 'keyword'`. 
 
-As we only needed which files had the the city name we decided to add the `l` option. We then did a time test to see if it made a difference since it had to output less information to our stdout. Another big thing with this option is how after the first detection in a file it jumps to the next file, and since we only need to know if its written there and not where, its a major thing for us. It decreased our search time by approximately 16 seconds, just above a 2 times increment in performance, which is a nice improvement. 
+### Search in many files
 
-We then looked into what else could increase our time performance, we found the option called `w`, it did not improve our timings BUT, it provided another important aspect in our task. It added the possibility to find matches that was skipped earlier by ignorering special characters such as question marks, exclamations marks, dots, commas and whitespaces. And it didnt worsen our performance either. 
+First off we wanted to search a whole directory full of text files and not just a specific file for our keyword, and since grep is used to search text, and we want to search multiple files. We would need a way to read all the files in a directory recursively, and lucky for us this is baked right into grep as `-R, -r or --recursive`.
 
-So now our command looks like this `grep -wrl '$cityName'`, however we are still around 9.8 seconds which is still to long, or better known as 5.5 days. So we knew either we had to cut down on our datasets which would seem okay to do since we had so many both books and cities or we needed to find a faster way to do it. We started to think about the obvious way to solve this problem when thinking about what hardware we had on hand, threading... 
+Now our grep command looks like this `grep -r 'keyword'`, and using it gets us a search time that is 25.8 seconds. This is searched through our total of 37400 books. When looking at the time, 25.8 seconds through 37400 books it is not bad, but we have a total of 48900 cities to search for. That totals to 14.6 days of searching which is horribly slow.
 
-Another aspect to the speeds described above is dependant on what cities we search for, in the timing examples we are using its `London` and its important its with a capital L since `london` gave timings that were twice as big.
+### Optimising search in files
 
-### greb benchmarks
+Now that we enabled ourself to search in our whole directory of files, we found out how long it took to search for a city, and all of our cities. We needed a way to make this search quicker, so we looked through the [man page](https://linux.die.net/man/1/grep)<sup>3</sup> for grep. Here we found a option called `-l or --files-with-matches` that had the following 2 attributes, suprress output; instead of printing the line of where the match is, it now only prints the file name. The second attribute which in our case was one of the biggest improvements, it will stop searching after it matches in the file. 
 
-#### Single Threaded
+Now our grep command looks like this `grep -rl 'keyword'` and using it gets us a search time that is 9.8 seconds, this is a improvement on 16 seconds / a 62% decrease in search time. Furthermore it also gives us a better format to save to files for further data processing. 
+
+### Cleaning our result set
+
+There is a problem with grep, that needs to be addressed in our use case. It matches the keyword as long as its in the text without checking if its in another word. So fx, if we search for `London` it will also match on `Londonderry`, which is not what expected to get as return. 
+
+We tried to fix this problem by making a regex pattern to match on `grep -rl -e '[\ \n,.<(\[]London[.,!?<>;:"]'`, it covers most use cases, however there are some it does not catch but its edge cases. We testet this command to see the timings, it gave a average runtime of 42.07 seconds which is a 329.29% decrease in performance compared with our 9.8 second timings we did with `grep -rl 'keyword'`. However we get a cleaner result set, which we also need in this case.
+
+This new timing on 42.07 seconds is pretty horrible and we are at the point now, where it again takes multiple weeks to search through our books. Once again we went diving into the [man page](https://linux.die.net/man/1/grep)<sup>3</sup> hoping for natural implemented way to fix our problem. We found the option `-w or --word-regexp` which did the same as our regex search, while also fixing the worst of our edge cases. We timed our new command `grep -rlw 'keyword'` and got timings down on our `grep -rl 'keyword'` timings again, which is around 9.8 seconds.
+
+### Case sensitivity
+
+We did not do anything about case sensitivity since city names supposed to be capitalised, but if its something you would like to use yourself it can be read about [here.](http://droptips.com/using-grep-and-ignoring-case-case-insensitive-grep)<sup>4</sup>
+
+## grep benchmarks
+
+The way performed our benchmarks is by running it multiple times. Our single threaded test has been run 100 times on each city. Since we had to test so many amount of threads in our multi threaeded benchmark, and we saw the results from our single threaded benchmark, we decided to lower the amount of test to 10 on each.
+
+We also decided to test our Parrallelization 10 times each.
+
+We choose a best case city London something in the middle Berlin and a worst case Odense. 
+
+All of our benchmark data is located in this [folder](https://github.com/DavidCarl/UFO/tree/master/run_time_data)<sup>5</sup> 
+
+### Single threaded
 ![](/Screenshot_1.png)
 
-The numbers used for the graph is in the run_time_data folder.
+<sub><sup>The numbers used for the graph is in the run_time_data folder.</sup></sub>
 
-On the image we can see 3 test groups, each group had a 100 runs to find a stable timing. Group 1 is London, Group 2 is Berlin and Group 3 is Odense. 
+On the image we can see 3 test groups. Group 1 is London, Group 2 is Berlin and Group 3 is Odense.
+ 
 The data shown in the graph display a very consistent run time with a standard deviation of 0.12 in Group 1, 0.23 in Group 2 and 0.23 in Group 3.
 If we look at the results of the different grep commands we can see that London is mentioned in far more books than Berlin is, and Berlin is mentioned in far more books than Odense is - this correlate well with our runtimes as we skip to the next book after the first match due to the `l` flag in grep, and therefore it skips seaching more text in the less often mentioned city names.
-In this case we choose a best case (London) something in the middle (Berlin) and a worst case (Odense).
 
-#### Multi-Threaded
+### Multi threaded
 
-We looked into how to do multithreading in bash, since grep is a bash command, and we stumpled upon `xargs` and `find` as a combo to increase our grep speed. `xargs` has a option P which is the number of threads it will run at a time. Furthermore `xargs` are also used to generate commands with different bash tools that dont play nicely together normally. One example where we use this is our command where we now both use `find` and `grep`, we use `find` to parse specific files to our `grep` command to search in. We found substantial speed in doing it with mulitple threads, however at the same time its not worth it.
+One way of improving the peformance is to utilze the resources more efficiently.
+By default grep will only use one thread at a time.
+There is a way to force grep to use more threads by uning `xargs`.
+You can read more about `xargs` [here](https://shapeshed.com/unix-xargs/)<sup>6</sup>
+
+In order to force grep to utilize more than one thread we append `find . -type f -print0 | xargs -0 -P $threadCount` infront of our grep command. 
+
+We benchmarked our multi threaded command line to figure out if it was worth it to use more threads on the same task.
 
 ![](/Screenshot_2.png)
+<sub><sup>Here group 1 to 10 represent the amount on threads and 11 is 20 threads. As we can see there is no real performance gains to get from using 4 to 20 threads.</sup></sub>
 
-Here group 1 to 10 represent the amount on threads and 11 is 20 threads. As we can see there is no real performance gains to get from using 4 to 20 threads.
+As seen on the graph we get some substantial performace gains by threading our process up untill 4 threads.
+Going from 1 to 2 threads gave us a 41.1% decrease in search time.
+Going from 1 to 3 threads gave us a 58.1% decrease in search time.
+Going from 1 to 4 threads gave us a 69.8% decrease in search time.
 
-As seen on the graph there is a good performance gain to get by threading it, nonetheless we also reach a point where it is not worth it to use more threads for for our search and instead start multiple searches at the same time. The breakpoint where its not worth it is located at 1 thread in this case. 
+The results show a significant diminishing returns for each thread we add to the process, and no performance gains above 4 threads (this point might shift based on the clock fequency of the given CPU)
 
-As said above we ended up with parallelization since it gave the better performance in our case, and a total runtime of 4-5 hours approximately.
+### Parallelization
 
-We ended up with the command `find . -type f -print0 | xargs -0 -P $threadCount grep -wrl '$cityName' > ./res/$cityName`
+Another way of utilze the resources more efficiently, is to run multiple instances side by side i.e. parallelization.
+But does parallelization reduce the performance of the single instance by creating a bottleneck on the disk?
 
-#### Reproducing our benchmark
-Its possible to find our test scripts [Single threaded](run.sh) and [multi threaded](RunThreads.sh). Its possible to download the data from [our server](http://www.dcarl.me/archive.tar). You will need to untar and unzip all the files. We recommend to either move the txt files to another folder or delete the zip and tar file afterwards.
+We benchmarked parallelization to figure out what effect running multiple searches at the same time would have on our data set.
 
-## Comparison and Conclusion
-Despite the fact that we never got to time the MySQL full text indexing and comparing it to our grep commando that we nerded a bit with, our teacher had a full text indexed database we could compare to as said in the 'MySQL full text indexing' section. Our conclussion on how to do it, depended on how it was supposed to be used. Are we talking about never again adding another city, it would be fastest to use our approach with using grep, with our experience making a Full text index. But if you are looking for having a more flexible database where the user can write whatever word they want, this includes cities and non cities it would definitely be fastest to make the full text indexing, since you are not limited to have such a powerfull server as us to make this quickly analyse the data.
+Running 2 in parallel increased the search time by 1.1%, 9.91 seconds.
+Running 3 in parallel increased the search time by 1.9%, 9.98 seconds.
+Running 4 in parallel increased the search time by 2.1%, 10 seconds.
+Running 24 in parallel increased the search time by 24.5%, 12.2 seconds.
 
-If we had to do the project again we would had used the Full text indexing instead, since we saw the performance. We would still have to figure out how much storage the MySQL server needed since the amount we gave was not enough.
+As seen above we lose a bit performance by running it in parallel, however the lost performance is not worth crying over when looking at the speeds you finish searches. At 24 threads we get 24 searches, but losing 24.5% search time on each. 
+In the case of runnig 24 parallel searches with our 48900 cities would the total compute time 165.8 hours, spread across 24 threads would give a 6,9 hours.
 
-## Written by
-### Tjalfe Møller & David Carl
+Running 12 searches in parallel with 2 threads allocated to each instance takes 6.8 seconds which is quite fast, but compared to running 24 threads with 24 searches which takes 12.2 seconds it would take 13.6 seconds to obtain the same result. 
+In the case of runnig 12 searches in parallel with 2 threads allocated to each instance with our 48900 cities would the total compute time 93.1 hours, spread across 12 parallel instances would give a 7,76 hours.
+
+Thereby we save 0,85 hours by only using a single thread 24 cores comapred to running 12 parallel searches with 2 threads allocated to each.
+
+### How to reproduce our benchmarks
+
+We created bash scripts for easier execution and reproducibility, however we couldnt get the bash script with multithreading to work properly so its testet manually by running the command X amount of times in quick succesion.
+
+For single thread test run [this](https://github.com/DavidCarl/UFO/blob/master/run.sh)<sup>7</sup> bash script, and for multi threaded take the command from [this](https://github.com/DavidCarl/UFO/blob/master/RunThreads.sh)<sup>8</sup> bash script, and put the amount of threads where it says `$i`. For parallelization test run [this](https://github.com/DavidCarl/UFO/blob/master/parallelization.sh)<sup>9</sup> bash script. Remember to change `24` to the amount of threads you wanna test with, in both occurences.
+
+As seen on our specs the server we had at our hand had a high RAM amount so we decided to create a RAM disk since we only had a HDD to remove that bottleneck. This might skew the results a bit compared to a HDD or SSD test.
+
+## Conclussion
+
+As we seen its worth it to take time looking through the man page (or just a manual) of the tool you are using. We managed to save 16 seconds by using built in options compared to our own implementations.
+
+By our benchmark we learn several things, if we have a lot of things to search for (in our case cities) it is better to have many single threaded greps running in parallelization, but if we have less things than threads on the system it is beginning to be worth it to multi thread our greps. As long as we can fill out the total amount of threads its worth it to multi thread, however it is not worth it to put more then 4 threads (in our case) on a single grep search at a time as seen in the multi threaded section.
+
+#### Reference 
+
+1: https://www.maketecheasier.com/what-is-grep-and-uses/
+
+2: https://www.computerhope.com/issues/ch001879.htm 
+
+3: https://linux.die.net/man/1/grep 
+
+4: http://droptips.com/using-grep-and-ignoring-case-case-insensitive-grep
+
+5: https://github.com/DavidCarl/UFO/tree/master/run_time_data
+
+6: https://shapeshed.com/unix-xargs/ 
+
+7: https://github.com/DavidCarl/UFO/blob/master/run.sh 
+
+8: https://github.com/DavidCarl/UFO/blob/master/RunThreads.sh
+
+9: https://github.com/DavidCarl/UFO/blob/master/parallelization.sh 
