@@ -56,22 +56,30 @@ We did not do anything about case sensitivity since city names supposed to be ca
 
 ## grep benchmarks
 
-The way performed our benchmarks is by running it multiple times. Our single threaded test has been run 100 times on each city. Since we had to test so many amount of threads in our multi threaeded benchmark, and we saw the results from our single threaded benchmark, we decided to lower the amount of test to 25 on each.
+The way performed our benchmarks is by running it multiple times. Our single threaded test has been run 100 times on each city. Since we had to test so many amount of threads in our multi threaeded benchmark, and we saw the results from our single threaded benchmark, we decided to lower the amount of test to 10 on each.
+
+We choose a best case city London something in the middle Berlin and a worst case Odense.
 
 ### Single threaded
 ![](/Screenshot_1.png)
 
-The numbers used for the graph is in the run_time_data folder.
+<sub><sup>The numbers used for the graph is in the run_time_data folder.</sup></sub>
 
-On the image we can see 3 test groups, each group had a 100 runs to find a stable timing. Group 1 is London, Group 2 is Berlin and Group 3 is Odense. 
+On the image we can see 3 test groups. Group 1 is London, Group 2 is Berlin and Group 3 is Odense.
+ 
 The data shown in the graph display a very consistent run time with a standard deviation of 0.12 in Group 1, 0.23 in Group 2 and 0.23 in Group 3.
 If we look at the results of the different grep commands we can see that London is mentioned in far more books than Berlin is, and Berlin is mentioned in far more books than Odense is - this correlate well with our runtimes as we skip to the next book after the first match due to the `l` flag in grep, and therefore it skips seaching more text in the less often mentioned city names.
-In this case we choose a best case (London) something in the middle (Berlin) and a worst case (Odense).
+
 
 ### Multi threaded
 
-One way of improving the peformance is to utilze the resources
+One way of improving the peformance is to utilze the resources more efficiently.
+By default grep will only use one thread at a time.
+There is a way to force grep to use more threads by uning `xargs`.
 You can read more about `xargs` [here](https://shapeshed.com/unix-xargs/)
+
+In order to force grep to utilize more than one thread we append `find . -type f -print0 | xargs -0 -P $threadCount` infront of our grep command. 
+
 
 ### Parallelization
 
