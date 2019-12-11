@@ -67,7 +67,7 @@ We choose a best case city 'London' something in the middle 'Berlin' and a worst
 All of our benchmark data is located in this [folder](https://github.com/DavidCarl/UFO/tree/master/run_time_data)<sup>5</sup> 
 
 ### Single threaded
-![](/Screenshot_1.png)
+![](https://raw.githubusercontent.com/DavidCarl/UFO/master/Screenshot_1.png)
 
 <sub><sup>The numbers used for the graph is in the run_time_data folder.</sup></sub>
 
@@ -87,7 +87,7 @@ In order to force grep to utilize more than one thread we append `find . -type f
 
 We benchmarked our multi threaded command line to figure out if it was worth it to use more threads on the same task.
 
-![](/Screenshot_2.png)
+![](https://raw.githubusercontent.com/DavidCarl/UFO/master/Screenshot_2.png)
 <sub><sup>Here group 1 to 10 represent the amount on threads and 11 is 20 threads. As we can see there is no real performance gains to get from using 4 to 20 threads.</sup></sub>
 
 As seen on the graph we get some substantial performance gains by threading our process up until 4 threads.
